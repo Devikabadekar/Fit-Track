@@ -51,7 +51,20 @@ Built using **YOLOv8, Flask, SQLite, and Ollama (Gemma-2B)**, the system deliver
 
 ---
 
-## 🔧 Installation (Coming Soon)
 
-> Code will be uploaded once final testing & deployment are complete.
+## 📌 Project Status
+🚧 Currently under development  
+Full source code will be published soon.
 
+---
+
+## 👩‍💻 Authors
+- Devika Badekar  
+- Pratiksha Singh  
+- Aishwarya Rajawat  
+- Mentor: Dr. Veena Khandelwal  
+
+---
+
+## ⭐ Support
+If you like this project, please give it a ⭐ on GitHub!
