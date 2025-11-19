@@ -1,4 +1,4 @@
-# 🚧 Fit-Track 2.0 — *Project In Progress*
+# Fit-Track 2.0 — *Project In Progress*
 AI-Powered Nutrition & Food Recognition System
 
 Fit-Track 2.0 is an AI-driven food recognition and nutrition tracking system that detects food items from images, calculates calories and macro–micro nutrients, and provides personalized diet recommendations.  
@@ -6,7 +6,7 @@ Built using **YOLOv8, Flask, SQLite, and Ollama (Gemma-2B)**, the system deliver
 
 ---
 
-## 🚀 Features
+## Features
 
 - **Food Recognition (YOLOv8):** Detects multiple dishes from a single image.
 - **Nutrition Estimation:** Calculates calories, macros, and micronutrients using curated datasets.
@@ -17,7 +17,7 @@ Built using **YOLOv8, Flask, SQLite, and Ollama (Gemma-2B)**, the system deliver
 
 ---
 
-## 🧠 Tech Stack
+## Tech Stack
 
 - **AI Models:** YOLOv8, Ollama Gemma-2B  
 - **Backend:** Flask (Python)  
@@ -27,7 +27,7 @@ Built using **YOLOv8, Flask, SQLite, and Ollama (Gemma-2B)**, the system deliver
 
 ---
 
-## 📊 Model Performance
+## Model Performance
 
 - **Top-1 Accuracy:** 96.58%  
 - **Top-5 Accuracy:** 99.71%  
@@ -36,7 +36,7 @@ Built using **YOLOv8, Flask, SQLite, and Ollama (Gemma-2B)**, the system deliver
 
 ---
 
-## 🖼️ Example Output
+## Example Output
 
 - **Detected Items:** Idli, Dosa  
 - **Calories:**  
@@ -52,13 +52,13 @@ Built using **YOLOv8, Flask, SQLite, and Ollama (Gemma-2B)**, the system deliver
 ---
 
 
-## 📌 Project Status
-🚧 Currently under development  
+## Project Status
+Currently under development  
 Full source code will be published soon.
 
 ---
 
-## 👩‍💻 Authors
+## Authors
 - Devika Badekar  
 - Pratiksha Singh  
 - Aishwarya Rajawat  
@@ -66,5 +66,5 @@ Full source code will be published soon.
 
 ---
 
-## ⭐ Support
-If you like this project, please give it a ⭐ on GitHub!
+## Support
+If you like this project, please give it a on GitHub!
