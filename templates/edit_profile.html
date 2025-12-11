@@ -1,0 +1,407 @@
+{% extends "header_footer.html" %}
+{% block title %}
+Edit Profile
+{% endblock %}
+{% block content %}
+
+<style>
+    :root {
+        --primary: #3bc789;
+        --primary-dark: #2da76f;
+        --secondary: #5c44d9;
+        --dark: #212529;
+        --light: #f8f9fa;
+        --gray: #6c757d;
+        --success: #198754;
+        --info: #0dcaf0;
+        --warning: #ffc107;
+        --danger: #dc3545;
+        --white: #ffffff;
+        --black: #000000;
+        --border-radius: 12px;
+        --box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        --transition: all 0.3s ease;
+    }
+
+    .edit-profile-container {
+        max-width: 800px;
+        margin: 40px auto;
+        padding: 0 15px;
+    }
+
+    .edit-profile-card {
+        background-color: var(--white);
+        border-radius: var(--border-radius);
+        box-shadow: var(--box-shadow);
+        overflow: hidden;
+        animation: fadeIn 0.8s ease both;
+    }
+
+    .edit-profile-header {
+        background: linear-gradient(135deg, var(--secondary), var(--primary));
+        color: var(--white);
+        padding: 30px;
+        text-align: center;
+        position: relative;
+    }
+
+    .edit-profile-header h1 {
+        font-size: 2rem;
+        font-weight: 600;
+        margin: 0;
+        animation: fadeInDown 0.6s ease both;
+    }
+
+    .edit-profile-header p {
+        margin-top: 10px;
+        opacity: 0.9;
+        animation: fadeInUp 0.6s ease 0.2s both;
+    }
+
+    .edit-profile-body {
+        padding: 40px;
+    }
+
+    .form-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 25px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+        position: relative;
+        animation: fadeInUp 0.5s ease both;
+    }
+
+    .form-group:nth-child(1) { animation-delay: 0.1s; }
+    .form-group:nth-child(2) { animation-delay: 0.2s; }
+    .form-group:nth-child(3) { animation-delay: 0.3s; }
+    .form-group:nth-child(4) { animation-delay: 0.4s; }
+    .form-group:nth-child(5) { animation-delay: 0.5s; }
+    .form-group:nth-child(6) { animation-delay: 0.6s; }
+    .form-group:nth-child(7) { animation-delay: 0.7s; }
+    .form-group:nth-child(8) { animation-delay: 0.8s; }
+    .form-group:nth-child(9) { animation-delay: 0.9s; }
+    .form-group:nth-child(10) { animation-delay: 1s; }
+
+    .form-group.full-width {
+        grid-column: 1 / span 2;
+    }
+
+    .form-label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 500;
+        color: var(--dark);
+        font-size: 0.95rem;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 12px 15px;
+        background-color: #f9f9f9;
+        border: 1px solid #e1e1e1;
+        border-radius: 8px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+    }
+
+    .form-control:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(59, 199, 137, 0.2);
+    }
+
+    .form-control:disabled {
+        background-color: #e9ecef;
+        cursor: not-allowed;
+    }
+
+    .form-control:hover:not(:disabled) {
+        border-color: #ced4da;
+    }
+
+    .form-select {
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23212529' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 1rem center;
+        background-size: 16px 12px;
+        padding-right: 2.5rem;
+    }
+
+    .form-actions {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        margin-top: 30px;
+        padding-top: 20px;
+        border-top: 1px solid #eee;
+        animation: fadeIn 0.8s ease 1.1s both;
+    }
+
+    .btn {
+        display: inline-block;
+        padding: 12px 24px;
+        border-radius: var(--border-radius);
+        font-weight: 500;
+        text-align: center;
+        cursor: pointer;
+        transition: var(--transition);
+        border: none;
+        font-size: 1rem;
+    }
+
+    .btn-primary {
+        background-color: var(--primary);
+        color: var(--white);
+    }
+
+    .btn-primary:hover {
+        background-color: var(--primary-dark);
+        transform: translateY(-3px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-secondary {
+        background-color: var(--gray);
+        color: var(--white);
+    }
+
+    .btn-secondary:hover {
+        background-color: #5a6268;
+        transform: translateY(-3px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .required-field::after {
+        content: '*';
+        color: var(--danger);
+        margin-left: 4px;
+    }
+
+    /* Spinner Input Styling */
+    input[type="number"] {
+        -moz-appearance: textfield; /* Firefox */
+    }
+
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    /* Custom number inputs */
+    .number-input-container {
+        position: relative;
+        display: flex;
+        align-items: center;
+    }
+
+    .number-control {
+        position: absolute;
+        right: 0;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        width: 30px;
+    }
+
+    .number-increment,
+    .number-decrement {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #f0f0f0;
+        cursor: pointer;
+        user-select: none;
+        font-size: 12px;
+        color: var(--dark);
+        transition: background-color 0.2s;
+    }
+
+    .number-increment {
+        border-top-right-radius: 8px;
+        border-bottom: 1px solid #e1e1e1;
+    }
+
+    .number-decrement {
+        border-bottom-right-radius: 8px;
+        border-top: 1px solid #e1e1e1;
+    }
+
+    .number-increment:hover,
+    .number-decrement:hover {
+        background-color: #e1e1e1;
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    @keyframes fadeInDown {
+        from { opacity: 0; transform: translateY(-20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .form-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .form-group.full-width {
+            grid-column: 1;
+        }
+        
+        .edit-profile-body {
+            padding: 25px;
+        }
+    }
+</style>
+
+<div class="edit-profile-container">
+    <div class="edit-profile-card">
+        <div class="edit-profile-header">
+            <h1>Edit Your Profile</h1>
+            <p>Update your personal information and preferences</p>
+        </div>
+        
+        <div class="edit-profile-body">
+            <form action="/update_profile" method="POST">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="name" class="form-label required-field">Name</label>
+                        <input type="text" id="name" name="name" class="form-control" value="{{name}}" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email" class="form-label required-field">Email</label>
+                        <input type="email" id="email" name="email" class="form-control" value="{{email}}" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password" class="form-label required-field">Password</label>
+                        <input type="password" id="password" name="password" class="form-control" value="{{password}}" required>
+                        <small class="password-toggle">Show password</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="age" class="form-label required-field">Age</label>
+                        <input type="number" min="10" max="70" id="age" name="age" class="form-control" value="{{age}}" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="gender" class="form-label required-field">Gender</label>
+                        <select name="gender" id="gender" class="form-control form-select" required>
+                            <option value="{{gender}}">{{gender}}</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="weight" class="form-label">Weight (lb)</label>
+                        <input type="number" min="90" max="600" id="weight" name="weight" class="form-control" value="{{weight}}" disabled>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="feet" class="form-label required-field">Height (ft)</label>
+                        <input type="number" min="4" max="7" id="feet" name="feet" class="form-control" value="{{ft}}" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="inches" class="form-label required-field">Height (in)</label>
+                        <input type="number" min="0" max="12" id="inches" name="inches" class="form-control" value="{{inch}}" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="vegan" class="form-label">Vegan</label>
+                        <select name="vegan" id="vegan" class="form-control form-select">
+                            <option value="{{vegan}}">{{vegan}}</option>
+                            <option value="no">No</option>
+                            <option value="yes">Yes</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="allergy" class="form-label">Allergies</label>
+                        <select name="allergy" id="allergy" class="form-control form-select">
+                            <option value="{{allergy}}">{{allergy}}</option>
+                            <option value="lactose">Lactose</option>
+                            <option value="gluten">Gluten</option>
+                            <option value="nuts">Nuts</option>
+                            <option value="eggs">Eggs</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                    <a href="/profile" class="btn btn-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Password toggle functionality
+        const passwordToggle = document.querySelector('.password-toggle');
+        const passwordInput = document.getElementById('password');
+        
+        if (passwordToggle && passwordInput) {
+            passwordToggle.addEventListener('click', function() {
+                if (passwordInput.type === 'password') {
+                    passwordInput.type = 'text';
+                    passwordToggle.textContent = 'Hide password';
+                } else {
+                    passwordInput.type = 'password';
+                    passwordToggle.textContent = 'Show password';
+                }
+            });
+        }
+        
+        // Initialize animations with a slight delay for better UX
+        setTimeout(() => {
+            document.querySelectorAll('.form-group').forEach(group => {
+                group.style.opacity = '1';
+            });
+        }, 100);
+        
+        // Form validation
+        const form = document.querySelector('form');
+        if (form) {
+            form.addEventListener('submit', function(event) {
+                let isValid = true;
+                
+                const requiredInputs = form.querySelectorAll('[required]');
+                requiredInputs.forEach(input => {
+                    if (!input.value.trim()) {
+                        isValid = false;
+                        input.classList.add('is-invalid');
+                    } else {
+                        input.classList.remove('is-invalid');
+                    }
+                });
+                
+                if (!isValid) {
+                    event.preventDefault();
+                    alert('Please fill in all required fields.');
+                }
+            });
+        }
+    });
+</script>
+
+{% endblock %}

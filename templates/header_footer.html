@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>{% block title %}{% endblock %}</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- External CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- External JS Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+
+    {% block script %}{% endblock %}
+
+    <style>
+        :root {
+            --primary: #6c63ff;   /* Replaced mint green with primary purpleish color */
+            --secondary: #00d9ff; /* Replaced coral with secondary blue */
+            --dark: #0a0a0a;          /* Deeper background */
+            --light: #F8F9FA;
+            --success: #28A745;
+            --warning: #FFC107;
+            --info: #17A2B8;
+            --danger: #DC3545;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--dark); /* Match homepage background */
+            color: var(--light);             /* set text color */
+            padding-top: 70px;              /* padding consistent */
+            transition: all 0.3s ease;
+        }
+
+        /* Navigation Styles */
+        .navbar {
+            background-color: var(--dark); /* Black background */
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+        }
+
+        .navbar-brand {
+            color: white !important;
+            font-weight: 700;
+            font-size: 1.6rem;
+            position: relative;
+            transform: translateZ(0);
+            transition: transform 0.3s ease;
+        }
+
+        .navbar-brand:hover {
+            transform: scale(1.05);
+        }
+
+        .navbar-brand::before {
+            content: '';
+            position: absolute;
+            z-index: -1;
+            left: 50%;
+            right: 50%;
+            bottom: 0;
+            background: var(--secondary);
+            height: 3px;
+            transition: all 0.3s ease-out;
+        }
+
+        .navbar-brand:hover::before {
+            left: 0;
+            right: 0;
+        }
+
+        .nav-link {
+            color: rgba(255, 255, 255, 0.9) !important;
+            font-weight: 500;
+            margin: 0 5px;
+            padding: 10px 15px !important;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: white !important;
+            background-color: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .navbar-nav .nav-item.active .nav-link {
+            color: white !important;
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .navbar-toggler {
+            border: none;
+            padding: 0.5rem;
+        }
+
+        .navbar-toggler:focus {
+            box-shadow: none;
+        }
+
+        .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255, 255, 255, 0.95)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+        }
+
+        /* Content Container */
+        .content-container {
+            min-height: calc(100vh - 70px); /* Adjust for no footer */
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-5px);
+            }
+
+            100% {
+                transform: translateY(0px);
+            }
+        }
+
+        /* Accessibility */
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: var(--primary);
+            color: white;
+            padding: 8px;
+            z-index: 100;
+            transition: top 0.3s ease;
+        }
+
+        .skip-link:focus {
+            top: 0;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            body {
+                padding-top: 56px;
+            }
+
+            .navbar-collapse {
+                background-color: rgba(62, 180, 137, 0.98);
+                border-radius: 0 0 10px 10px;
+                padding: 15px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            }
+
+            .footer-links a {
+                margin: 0 8px;
+                font-size: 0.9rem;
+            }
+
+            .social-icons a {
+                width: 35px;
+                height: 35px;
+                margin: 0 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Accessibility Skip Link -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="/first">
+                <i class="fas fa-leaf me-2"></i>FitTrack
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/index"><i class="fas fa-home me-1"></i> Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/recommend_setup"><i class="fas fa-lightbulb me-1"></i>
+                            Recommendation</a>
+                    </li>
+                    <li class="nav-item">
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/diabetes_detection"><i class="fas fa-heartbeat me-1"></i> Diabetes Check</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/predict"><i class="fas"></i> Analyze Food</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/profile"><i class="fas fa-user me-1"></i> Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout"><i class="fas fa-sign-out-alt me-1"></i> Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div id="main-content" class="container content-container">
+        {% block content %}{% endblock %}
+    </div>
+
+    {% block script2 %}{% endblock %}
+
+    <script>
+        // Highlight active navigation link
+        document.addEventListener('DOMContentLoaded', function () {
+            const currentLocation = window.location.pathname;
+            const navLinks = document.querySelectorAll('.navbar-nav .nav-link');
+
+            navLinks.forEach(link => {
+                if (link.getAttribute('href') === currentLocation) {
+                    link.parentElement.classList.add('active');
+                }
+            });
+
+            // Navbar animation
+            anime({
+                targets: '.navbar-brand',
+                opacity: [0, 1],
+                translateY: ['-20px', '0px'],
+                easing: 'easeOutExpo',
+                duration: 1200
+            });
+
+            anime({
+                targets: '.nav-item',
+                opacity: [0, 1],
+                translateY: ['-10px', '0px'],
+                delay: anime.stagger(100, { start: 300 }),
+                easing: 'easeOutExpo',
+                duration: 800
+            });
+
+            // Footer social icons animation
+            anime({
+                targets: '.social-icons a',
+                scale: [0.5, 1],
+                opacity: [0, 1],
+                delay: anime.stagger(100),
+                easing: 'easeOutElastic(1, .6)',
+                duration: 1500,
+                autoplay: true
+            });
+
+            // Set permanent floating animation for specific elements
+            const floatingElements = document.querySelectorAll('.social-icons a');
+            floatingElements.forEach(el => {
+                el.style.animation = 'float 3s ease-in-out infinite';
+            });
+        });
+
+        // Navbar scroll behavior
+        window.addEventListener('scroll', function () {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.style.padding = '0.3rem 1rem';
+                navbar.style.boxShadow = '0 4px 15px rgba(0, 0, 0, 0.1)';
+            } else {
+                navbar.style.padding = '0.5rem 1rem';
+                navbar.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.1)';
+            }
+        });
+    </script>
+</body>
+</html>

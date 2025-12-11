@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>FitTrack - Food Prediction</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="Food recognition, calorie tracking, diet management" name="keywords">
+    <meta content="Upload food images for automatic recognition and calorie estimation" name="description">
+
+    <!-- Favicon -->
+    <link href="../static/img/favicon.ico" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
+    <!-- Animation Library -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+
+    <style>
+        :root {
+            --primary: #5468FF;
+            --secondary: #4FB1E8;
+            --dark: #121923;
+            --darker: #0A101A;
+            --light-blue: #64B1F8;
+            --light-text: #F8F9FA;
+            --gradient: linear-gradient(135deg, #5468FF, #64B1F8);
+            --background-gradient: linear-gradient(135deg, #0A101A, #121923);
+            --shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            --transition: all 0.3s ease;
+            --card-bg: #1A2333;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: var(--background-gradient);
+            color: var(--light-text);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        /* Header Styles */
+        header {
+            background-color: var(--darker);
+            box-shadow: var(--shadow);
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            transition: transform 0.3s ease;
+        }
+
+        .navbar-brand:hover {
+            transform: scale(1.05);
+        }
+
+        .navbar-brand h1 {
+            color: var(--light-text);
+            margin: 0;
+            font-size: 1.8rem;
+        }
+
+        .navbar-brand .text-primary {
+            color: var(--secondary);
+        }
+
+        .navbar-brand i {
+            font-size: 1.5rem;
+            color: var(--secondary);
+            margin-right: 0.5rem;
+        }
+
+        .navbar-nav {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .home-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 48px;
+            height: 48px;
+            background-color: var(--primary);
+            color: var(--light-text);
+            border-radius: 50%;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(84, 104, 255, 0.3);
+        }
+
+        .home-button:hover {
+            background-color: var(--secondary);
+            transform: translateY(-3px) rotate(5deg);
+            box-shadow: 0 6px 12px rgba(84, 104, 255, 0.4);
+        }
+
+        .home-button i {
+            font-size: 1.2rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+            display: inline-block;
+            border: none;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: var(--gradient);
+            color: var(--light-text);
+            box-shadow: 0 4px 8px rgba(84, 104, 255, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(84, 104, 255, 0.4);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            color: var(--light-blue);
+            border: 2px solid var(--light-blue);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--light-blue);
+            color: var(--dark);
+        }
+
+        /* Main Content */
+        main {
+            margin-top: 5rem;
+            padding: 3rem 0;
+        }
+
+        .page-title {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .page-title h1 {
+            font-size: 2.5rem;
+            color: var(--light-text);
+            margin-bottom: 1rem;
+            animation: fadeInDown 1s;
+            background: linear-gradient(to right, var(--secondary), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .page-title p {
+            color: var(--light-text);
+            max-width: 700px;
+            margin: 0 auto;
+            animation: fadeIn 1.2s;
+        }
+
+        /* Upload Section */
+        .upload-section {
+            background-color: var(--card-bg);
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            padding: 2rem;
+            max-width: 800px;
+            margin: 0 auto 3rem;
+            animation: fadeIn 1s ease;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .upload-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .upload-title {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            color: var(--light-text);
+        }
+
+        .file-upload {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 2px dashed var(--light-blue);
+            border-radius: 10px;
+            padding: 2rem;
+            position: relative;
+            transition: all 0.3s ease;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+            background-color: rgba(84, 104, 255, 0.1);
+        }
+
+        .file-upload:hover {
+            border-color: var(--primary);
+            transform: scale(1.02);
+        }
+
+        .file-upload::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                to bottom right,
+                rgba(255, 255, 255, 0) 0%,
+                rgba(255, 255, 255, 0.1) 50%,
+                rgba(255, 255, 255, 0) 100%
+            );
+            transform: rotate(45deg);
+            transition: all 0.5s ease;
+            opacity: 0;
+        }
+
+        .file-upload:hover::before {
+            animation: shine 1.5s;
+        }
+
+        @keyframes shine {
+            0% {
+                left: -100%;
+                opacity: 0;
+            }
+            50% {
+                opacity: 0.3;
+            }
+            100% {
+                left: 100%;
+                opacity: 0;
+            }
+        }
+
+        .file-upload .file-label {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: var(--gradient);
+            color: var(--light-text);
+            border-radius: 50px;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 8px rgba(84, 104, 255, 0.3);
+        }
+
+        .file-upload .file-label:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(84, 104, 255, 0.4);
+        }
+
+        .file-upload input[type="file"] {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        #file-name {
+            margin-top: 0.5rem;
+            color: var(--light-text);
+        }
+
+        .upload-button {
+            width: 100%;
+            padding: 1rem;
+            background: var(--gradient);
+            color: var(--light-text);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+            box-shadow: 0 5px 15px rgba(84, 104, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .upload-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(84, 104, 255, 0.4);
+        }
+
+        .upload-button::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                to right,
+                rgba(255, 255, 255, 0) 0%,
+                rgba(255, 255, 255, 0.2) 50%,
+                rgba(255, 255, 255, 0) 100%
+            );
+            transition: all 0.5s ease;
+        }
+
+        .upload-button:hover::after {
+            animation: shine-button 1.5s infinite;
+        }
+
+        @keyframes shine-button {
+            0% {
+                left: -100%;
+            }
+            100% {
+                left: 100%;
+            }
+        }
+
+        /* Results Section */
+        .result-section {
+            margin-top: 2rem;
+        }
+
+        .result-section h2 {
+            color: var(--light-text);
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .result {
+            background-color: rgba(84, 104, 255, 0.1);
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--light-text);
+            transition: all 0.3s ease;
+            border-left: 3px solid var(--light-blue);
+        }
+
+        .result:hover {
+            transform: translateX(5px);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+            background-color: rgba(84, 104, 255, 0.2);
+        }
+
+        .result-image {
+            width: 100%;
+            max-width: 600px;
+            border-radius: 10px;
+            margin: 1.5rem auto;
+            display: block;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .result-image:hover {
+            transform: scale(1.03);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Feedback Section */
+        .feedback-section {
+            margin-top: 2rem;
+            text-align: center;
+        }
+
+        .feedback-section h2 {
+            color: var(--light-text);
+            margin-bottom: 1rem;
+        }
+
+        .feedback-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .feedback-button {
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            border: none;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .feedback-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .feedback-button.correct {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .feedback-button.incorrect {
+            background-color: #F44336;
+            color: white;
+        }
+
+        .feedback-input {
+            margin: 1rem 0;
+            padding: 0.75rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            width: 100%;
+            max-width: 400px;
+            transition: all 0.3s ease;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--light-text);
+        }
+
+        .feedback-input:focus {
+            border-color: var(--light-blue);
+            box-shadow: 0 0 0 3px rgba(84, 104, 255, 0.2);
+            outline: none;
+        }
+
+        /* Food List Section */
+        .food-list-section {
+            margin-top: 3rem;
+        }
+
+        .food-list-section h3 {
+            color: var(--light-text);
+            margin-bottom: 1rem;
+            text-align: center;
+            animation: fadeIn 1s;
+        }
+
+        .food-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 1rem;
+            animation: fadeIn 1.2s;
+        }
+
+        .food-item {
+            background-color: var(--card-bg);
+            padding: 0.75rem;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .food-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+            background: var(--gradient);
+            color: white;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                padding: 1rem;
+            }
+
+            .navbar-nav {
+                margin-top: 1rem;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .upload-section {
+                padding: 1.5rem;
+            }
+        }
+
+        /* Spinner */
+        .spinner {
+            display: none;
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(84, 104, 255, 0.1);
+            border-radius: 50%;
+            border-top-color: var(--light-blue);
+            animation: spin 1s linear infinite;
+            margin: 1rem auto;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* New Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+
+        /* Floating animation for some elements */
+        @keyframes float {
+            0% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+            100% {
+                transform: translateY(0px);
+            }
+        }
+
+        .float-animation {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        /* Nutrition Cards Styling */
+        .nutrition-summary {
+            animation: fadeIn 0.8s ease;
+        }
+
+        .nutrition-card {
+            transition: all 0.3s ease;
+            cursor: default;
+        }
+
+        .nutrition-card:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .food-nutrition-item {
+            transition: all 0.3s ease;
+        }
+
+        .food-nutrition-item:hover {
+            transform: translateX(10px);
+            box-shadow: 0 5px 20px rgba(100, 177, 248, 0.3);
+        }
+
+        /* Icon animations */
+        .nutrition-card i,
+        .food-nutrition-item i {
+            transition: all 0.3s ease;
+        }
+
+        .nutrition-card:hover i,
+        .food-nutrition-item:hover i {
+            transform: scale(1.2) rotate(5deg);
+        }
+    </style>
+
+</head>
+
+<body>
+    <!-- Header Start -->
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <a href="/" class="navbar-brand animate__animated animate__fadeIn">
+                    <i class="fa fa-utensils"></i>
+                    <h1><span class="text-primary">Fit</span>Track</h1>
+                </a>
+                <div class="navbar-nav">
+                    <a href="/first" class="home-button animate__animated animate__bounceIn">
+                        <i class="fa fa-home"></i>
+                    </a>
+                </div>
+            </nav>
+        </div>
+    </header>
+    <!-- Header End -->
+
+    <!-- Main Content Start -->
+    <main>
+        <div class="container">
+            <section class="page-title animate__animated animate__fadeIn">
+                <h1>Food Image Recognition</h1>
+                <p>Upload an image of your food to get complete macronutrient analysis including calories, protein, carbs, and fats</p>
+            </section>
+
+            <section class="upload-section animate__animated animate__fadeInUp">
+                <h2 class="upload-title">Upload Your Food Image</h2>
+
+                <form action="/prediction1" method="post" enctype="multipart/form-data">
+                    <div class="file-upload pulse-animation">
+                        <label for="file" class="file-label">Choose Image File</label>
+                        <input type="file" id="file" name="file" onchange="displayFileName()" accept=".jpg, .jpeg, .png">
+                        <p id="file-name">No file chosen</p>
+                    </div>
+
+                    <button type="submit" class="upload-button">Analyze Food Image</button>
+
+                    <div class="spinner" id="loading-spinner"></div>
+
+                    <div class="result-section">
+                        <!-- Results will appear here after processing -->
+                        {% if error %}
+                        <p class="result animate__animated animate__fadeIn">{{ error }}</p>
+                        {% endif %}
+
+                        {% if filename %}
+                        <h2 class="animate__animated animate__fadeIn">Nutritional Analysis</h2>
+                        
+                        <!-- Total Nutrition Summary -->
+                        <div class="nutrition-summary" style="background: linear-gradient(135deg, rgba(84, 104, 255, 0.2), rgba(100, 177, 248, 0.2)); padding: 1.5rem; border-radius: 15px; margin-bottom: 2rem; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);">
+                            <h3 style="color: var(--light-blue); margin-bottom: 1rem; text-align: center;">Total Nutrition Profile</h3>
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem;">
+                                <div class="nutrition-card animate__animated animate__fadeInLeft" style="background-color: rgba(255, 99, 132, 0.2); padding: 1rem; border-radius: 10px; text-align: center; border: 2px solid rgba(255, 99, 132, 0.5);">
+                                    <i class="fas fa-fire" style="font-size: 2rem; color: #FF6384; margin-bottom: 0.5rem;"></i>
+                                    <p style="font-size: 0.9rem; margin: 0; color: #ccc;">Calories</p>
+                                    <p style="font-size: 1.5rem; font-weight: bold; margin: 0; color: #FF6384;">{{ total_nutrition.calories }}</p>
+                                    <p style="font-size: 0.8rem; margin: 0; color: #ccc;">kcal</p>
+                                </div>
+                                <div class="nutrition-card animate__animated animate__fadeInLeft" style="animation-delay: 0.1s; background-color: rgba(54, 162, 235, 0.2); padding: 1rem; border-radius: 10px; text-align: center; border: 2px solid rgba(54, 162, 235, 0.5);">
+                                    <i class="fas fa-drumstick-bite" style="font-size: 2rem; color: #36A2EB; margin-bottom: 0.5rem;"></i>
+                                    <p style="font-size: 0.9rem; margin: 0; color: #ccc;">Protein</p>
+                                    <p style="font-size: 1.5rem; font-weight: bold; margin: 0; color: #36A2EB;">{{ total_nutrition.protein }}</p>
+                                    <p style="font-size: 0.8rem; margin: 0; color: #ccc;">g</p>
+                                </div>
+                                <div class="nutrition-card animate__animated animate__fadeInLeft" style="animation-delay: 0.2s; background-color: rgba(255, 206, 86, 0.2); padding: 1rem; border-radius: 10px; text-align: center; border: 2px solid rgba(255, 206, 86, 0.5);">
+                                    <i class="fas fa-bread-slice" style="font-size: 2rem; color: #FFCE56; margin-bottom: 0.5rem;"></i>
+                                    <p style="font-size: 0.9rem; margin: 0; color: #ccc;">Carbs</p>
+                                    <p style="font-size: 1.5rem; font-weight: bold; margin: 0; color: #FFCE56;">{{ total_nutrition.carbs }}</p>
+                                    <p style="font-size: 0.8rem; margin: 0; color: #ccc;">g</p>
+                                </div>
+                                <div class="nutrition-card animate__animated animate__fadeInLeft" style="animation-delay: 0.3s; background-color: rgba(75, 192, 192, 0.2); padding: 1rem; border-radius: 10px; text-align: center; border: 2px solid rgba(75, 192, 192, 0.5);">
+                                    <i class="fas fa-tint" style="font-size: 2rem; color: #4BC0C0; margin-bottom: 0.5rem;"></i>
+                                    <p style="font-size: 0.9rem; margin: 0; color: #ccc;">Fat</p>
+                                    <p style="font-size: 1.5rem; font-weight: bold; margin: 0; color: #4BC0C0;">{{ total_nutrition.fat }}</p>
+                                    <p style="font-size: 0.8rem; margin: 0; color: #ccc;">g</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Individual Food Items -->
+                        <h3 style="color: var(--light-text); margin-bottom: 1rem; text-align: center;">Detected Food Items</h3>
+                        {% for item in items_with_nutrition %}
+                        <div class="food-nutrition-item animate__animated animate__fadeInUp" style="animation-delay: {{loop.index * 0.1}}s; background-color: var(--card-bg); padding: 1.5rem; border-radius: 10px; margin-bottom: 1rem; box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2); border-left: 4px solid {% if item.get('data_available') %}var(--light-blue){% else %}#FF6384{% endif %};">
+                            <h4 style="color: {% if item.get('data_available') %}var(--light-blue){% else %}#FF6384{% endif %}; margin-bottom: 0.5rem; text-transform: capitalize;">
+                                {{ item.get('label').replace('-', ' ') }} (x{{ item.get('count') }})
+                            </h4>
+                            
+                            {% if item.get('data_available') %}
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 0.75rem; margin-top: 1rem;">
+                                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                    <i class="fas fa-fire" style="color: #FF6384;"></i>
+                                    <span style="color: #ccc;">Calories:</span>
+                                    <strong style="color: var(--light-text);">{{ item.get('calories') }} kcal</strong>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                    <i class="fas fa-drumstick-bite" style="color: #36A2EB;"></i>
+                                    <span style="color: #ccc;">Protein:</span>
+                                    <strong style="color: var(--light-text);">{{ item.get('protein') }} g</strong>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                    <i class="fas fa-bread-slice" style="color: #FFCE56;"></i>
+                                    <span style="color: #ccc;">Carbs:</span>
+                                    <strong style="color: var(--light-text);">{{ item.get('carbs') }} g</strong>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                    <i class="fas fa-tint" style="color: #4BC0C0;"></i>
+                                    <span style="color: #ccc;">Fat:</span>
+                                    <strong style="color: var(--light-text);">{{ item.get('fat') }} g</strong>
+                                </div>
+                            </div>
+                            {% else %}
+                            <div style="margin-top: 1rem; padding: 1rem; background-color: rgba(255, 99, 132, 0.1); border-radius: 8px; border: 1px dashed #FF6384;">
+                                <p style="color: #FF6384; margin: 0; display: flex; align-items: center; gap: 0.5rem;">
+                                    <i class="fas fa-exclamation-circle"></i>
+                                    <strong>Nutrition data not available in database</strong>
+                                </p>
+                            </div>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+
+                        <img src="{{ filename }}" alt="Food Image" class="result-image animate__animated animate__fadeIn float-animation">
+
+                        <div class="feedback-section animate__animated animate__fadeIn" style="animation-delay: 0.5s">
+                            <h2>Feedback</h2>
+                            <p>Was the prediction correct?</p>
+
+                            <div class="feedback-buttons">
+                                <button type="button" class="feedback-button correct" id="correctbutton" onclick="setPrediction('correct')">Correct</button>
+                                <button type="button" class="feedback-button incorrect" id="incorrectbutton" onclick="setPrediction('incorrect')">Incorrect</button>
+                            </div>
+
+                            <div id="feedback-form" style="display:none;">
+                                <label for="correct_food" id="correctFoodLabel">Enter Correct Food Name:</label>
+                                <input type="text" id="correct_food" name="correct_food" placeholder="Correct food name" class="feedback-input">
+                                <button type="button" id="checkcal" class="btn btn-primary" onclick="openGoogleSearchLink()">Check Calories</button>
+                            </div>
+
+                            <p id="correctpred" style="display:none; color: var(--light-blue); font-weight: 500;">Great! Thanks for your feedback.</p>
+                        </div>
+                        {% endif %}
+                    </div>
+                </form>
+            </section>
+
+            <section class="food-list-section animate__animated animate__fadeIn">
+                <h3>Our Model Recognizes These 30 Indian Dishes</h3>
+                <div class="food-grid">
+                    <div class="food-item">Aloo Fry</div>
+                    <div class="food-item">Aloo Gobi</div>
+                    <div class="food-item">Bhature</div>
+                    <div class="food-item">Bhindi Masala</div>
+                    <div class="food-item">Chai</div>
+                    <div class="food-item">Chicken Biryani</div>
+                    <div class="food-item">Chicken Seekh Kebab</div>
+                    <div class="food-item">Chole</div>
+                    <div class="food-item">Coconut Chutney</div>
+                    <div class="food-item">Dal Tadka</div>
+                    <div class="food-item">Dosa</div>
+                    <div class="food-item">Dum Aloo</div>
+                    <div class="food-item">Fish Curry</div>
+                    <div class="food-item">Ghevar</div>
+                    <div class="food-item">Green Chutney</div>
+                    <div class="food-item">Gulab Jamun</div>
+                    <div class="food-item">Idli</div>
+                    <div class="food-item">Jalebi</div>
+                    <div class="food-item">Kheer</div>
+                    <div class="food-item">Kulfi</div>
+                    <div class="food-item">Lassi</div>
+                    <div class="food-item">Mutton Curry</div>
+                    <div class="food-item">Onion Pakoda</div>
+                    <div class="food-item">Palak Paneer</div>
+                    <div class="food-item">Poha</div>
+                    <div class="food-item">Rajma Curry</div>
+                    <div class="food-item">Rasmalai</div>
+                    <div class="food-item">Samosa</div>
+                    <div class="food-item">Shahi Paneer</div>
+                    <div class="food-item">White Rice</div>
+                </div>
+            </section>
+        </div>
+    </main>
+    <!-- Main Content End -->
+
+    <script>
+        function displayFileName() {
+            var fileInput = document.getElementById('file');
+            var fileNameSpan = document.getElementById('file-name');
+            if (fileInput.files.length > 0) {
+                fileNameSpan.textContent = fileInput.files[0].name;
+            } else {
+                fileNameSpan.textContent = 'No file chosen';
+            }
+        }
+
+        function setPrediction(value) {
+            var feedbackForm = document.getElementById('feedback-form');
+            var correctPrediction = document.getElementById('correctpred');
+            var correctButton = document.getElementById('correctbutton');
+            var incorrectButton = document.getElementById('incorrectbutton');
+
+            if (value === 'incorrect') {
+                feedbackForm.style.display = 'block';
+                correctPrediction.style.display = 'none';
+                correctButton.style.display = 'none';
+                incorrectButton.style.display = 'none';
+            } else {
+                feedbackForm.style.display = 'none';
+                correctPrediction.style.display = 'block';
+                correctButton.style.display = 'none';
+                incorrectButton.style.display = 'none';
+            }
+        }
+
+        function openGoogleSearchLink() {
+            var correctFoodInput = document.getElementById('correct_food');
+            var foodName = correctFoodInput.value.trim();
+
+            if (foodName !== '') {
+                var searchLink = `https://www.google.com/search?q=${encodeURIComponent(foodName)}+calories`;
+                window.open(searchLink, '_blank');
+            } else {
+                alert('Please enter a correct food name first.');
+            }
+        }
+
+        // Show spinner when form is submitted
+        document.querySelector('form').addEventListener('submit', function() {
+            document.getElementById('loading-spinner').style.display = 'block';
+        });
+
+        // Add animation to food items when scrolling
+        document.addEventListener('DOMContentLoaded', function() {
+            const foodItems = document.querySelectorAll('.food-item');
+
+            function checkScroll() {
+                const triggerBottom = window.innerHeight * 0.8;
+
+                foodItems.forEach((item, index) => {
+                    const itemTop = item.getBoundingClientRect().top;
+
+                    if (itemTop < triggerBottom) {
+                        // Check if the animate class is already added to prevent re-animating on scroll up
+                        if (!item.classList.contains('animate__animated')) {
+                            setTimeout(() => {
+                                item.classList.add('animate__animated', 'animate__fadeInUp');
+                            }, index * 50);
+                        }
+                    }
+                });
+            }
+
+            window.addEventListener('scroll', checkScroll);
+            checkScroll(); // Check on initial load
+        });
+    </script>
+</body>
+
+</html>

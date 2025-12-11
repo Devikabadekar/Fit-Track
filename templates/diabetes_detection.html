@@ -1,0 +1,372 @@
+{% extends "header_footer.html" %}
+{% block title %}
+Diabetes Detection
+{% endblock %}
+
+{% block content %}
+
+<style>
+    :root {
+        --primary: #6c63ff;
+        --primary-dark: #5046e5;
+        --secondary: #00d9ff;
+        --accent: #ff7e5f;
+        --dark: #121212;
+        --darker: #0a0a0a;
+        --dark-card: #1e1e1e;
+        --medium-dark: #2d2d2d;
+        --light-text: #f1f1f1;
+        --gray: #9e9e9e;
+        --input-bg: #1e1e1e;
+        --input-border: #2d2d2d;
+        --border-radius: 10px;
+        --box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+        --transition: all 0.3s ease;
+        --gradient: linear-gradient(135deg, var(--primary), var(--secondary));
+        --success: #28a745;
+        --danger: #dc3545;
+    }
+
+    body {
+        background-color: var(--dark);
+        color: var(--light-text);
+    }
+
+    .container-fluid {
+        padding: 40px 20px;
+    }
+
+    .diabetes-card {
+        background-color: var(--dark-card);
+        border-radius: var(--border-radius);
+        box-shadow: var(--box-shadow);
+        padding: 40px;
+        max-width: 900px;
+        margin: 0 auto;
+        animation: fadeIn 0.8s ease-out;
+    }
+
+    .diabetes-card h2 {
+        font-size: 32px;
+        font-weight: 700;
+        margin-bottom: 10px;
+        background: var(--gradient);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        text-align: center;
+    }
+
+    .diabetes-card .subtitle {
+        color: var(--gray);
+        text-align: center;
+        margin-bottom: 30px;
+        font-size: 16px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-group label {
+        color: var(--light-text);
+        font-weight: 500;
+        margin-bottom: 8px;
+        display: block;
+        font-size: 14px;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 12px 16px;
+        font-size: 16px;
+        border: 2px solid var(--input-border);
+        border-radius: var(--border-radius);
+        background-color: var(--input-bg);
+        color: var(--light-text);
+        transition: var(--transition);
+    }
+
+    .form-control:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.15);
+    }
+
+    .form-row {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+        margin-bottom: 10px;
+    }
+
+    .submit-btn {
+        width: 100%;
+        padding: 16px;
+        background: var(--gradient);
+        color: var(--light-text);
+        border: none;
+        border-radius: var(--border-radius);
+        font-size: 18px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: var(--transition);
+        margin-top: 20px;
+        box-shadow: 0 5px 15px rgba(108, 99, 255, 0.3);
+    }
+
+    .submit-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(108, 99, 255, 0.4);
+    }
+
+    .submit-btn:active {
+        transform: translateY(0);
+    }
+
+    .result-card {
+        margin-top: 30px;
+        padding: 30px;
+        background: var(--medium-dark);
+        border-radius: var(--border-radius);
+        text-align: center;
+        animation: slideIn 0.5s ease-out;
+    }
+
+    .result-positive {
+        border-left: 5px solid var(--danger);
+    }
+
+    .result-negative {
+        border-left: 5px solid var(--success);
+    }
+
+    .result-title {
+        font-size: 24px;
+        font-weight: 700;
+        margin-bottom: 15px;
+    }
+
+    .result-positive .result-title {
+        color: var(--danger);
+    }
+
+    .result-negative .result-title {
+        color: var(--success);
+    }
+
+    .confidence-bar {
+        width: 100%;
+        height: 30px;
+        background-color: var(--input-bg);
+        border-radius: 15px;
+        overflow: hidden;
+        margin: 20px 0;
+        position: relative;
+    }
+
+    .confidence-fill {
+        height: 100%;
+        background: var(--gradient);
+        border-radius: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 600;
+        transition: width 1s ease;
+    }
+
+    .info-icon {
+        display: inline-block;
+        width: 80px;
+        height: 80px;
+        margin-bottom: 20px;
+    }
+
+    .helper-text {
+        color: var(--gray);
+        font-size: 13px;
+        margin-top: 5px;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateX(-20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    .error-message {
+        background-color: rgba(220, 53, 69, 0.1);
+        border-left: 4px solid var(--danger);
+        padding: 15px;
+        border-radius: var(--border-radius);
+        margin-bottom: 20px;
+        color: var(--danger);
+    }
+
+    @media (max-width: 768px) {
+        .diabetes-card {
+            padding: 20px;
+        }
+
+        .form-row {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<div class="container-fluid">
+    <div class="diabetes-card">
+        <svg class="info-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin: 0 auto; display: block;">
+            <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM13 17H11V11H13V17ZM13 9H11V7H13V9Z" fill="url(#gradient)"/>
+            <defs>
+                <linearGradient id="gradient" x1="2" y1="2" x2="22" y2="22">
+                    <stop offset="0%" style="stop-color:#6c63ff;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#00d9ff;stop-opacity:1" />
+                </linearGradient>
+            </defs>
+        </svg>
+        
+        <h2>Diabetes Detection</h2>
+        <p class="subtitle">Enter your health parameters for diabetes risk assessment using AI</p>
+
+        {% if error %}
+        <div class="error-message">
+            <strong>Error:</strong> {{ error }}
+        </div>
+        {% endif %}
+
+        <form method="POST" action="/diabetes_detection">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="pregnancies">Number of Pregnancies</label>
+                    <input type="number" class="form-control" id="pregnancies" name="pregnancies" 
+                           value="{{ pregnancies if pregnancies else 0 }}" min="0" max="20" required>
+                    <p class="helper-text">Number of times pregnant (0 if not applicable)</p>
+                </div>
+
+                <div class="form-group">
+                    <label for="glucose">Glucose Level (mg/dL)</label>
+                    <input type="number" class="form-control" id="glucose" name="glucose" 
+                           value="{{ glucose if glucose else '' }}" min="0" max="300" step="0.1" required>
+                    <p class="helper-text">Normal fasting: 70-100 mg/dL</p>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="blood_pressure">Blood Pressure (mm Hg)</label>
+                    <input type="number" class="form-control" id="blood_pressure" name="blood_pressure" 
+                           value="{{ blood_pressure if blood_pressure else '' }}" min="0" max="200" step="0.1" required>
+                    <p class="helper-text">Diastolic blood pressure (Normal: 60-80)</p>
+                </div>
+
+                <div class="form-group">
+                    <label for="skin_thickness">Skin Thickness (mm)</label>
+                    <input type="number" class="form-control" id="skin_thickness" name="skin_thickness" 
+                           value="{{ skin_thickness if skin_thickness else '' }}" min="0" max="100" step="0.1" required>
+                    <p class="helper-text">Triceps skin fold thickness</p>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="insulin">Insulin Level (μU/mL)</label>
+                    <input type="number" class="form-control" id="insulin" name="insulin" 
+                           value="{{ insulin if insulin else '' }}" min="0" max="900" step="0.1" required>
+                    <p class="helper-text">2-Hour serum insulin (Normal: 16-166)</p>
+                </div>
+
+                <div class="form-group">
+                    <label for="bmi">Body Mass Index (BMI)</label>
+                    <input type="number" class="form-control" id="bmi" name="bmi" 
+                           value="{{ bmi if bmi else '' }}" min="10" max="70" step="0.1" required>
+                    <p class="helper-text">Weight(kg) / Height(m)²</p>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="diabetes_pedigree">Diabetes Pedigree Function</label>
+                    <input type="number" class="form-control" id="diabetes_pedigree" name="diabetes_pedigree" 
+                           value="{{ diabetes_pedigree if diabetes_pedigree else '' }}" min="0" max="3" step="0.001" required>
+                    <p class="helper-text">Family history score (0.08-2.42 typical)</p>
+                </div>
+
+                <div class="form-group">
+                    <label for="age">Age (years)</label>
+                    <input type="number" class="form-control" id="age" name="age" 
+                           value="{{ age if age else '' }}" min="1" max="120" required>
+                    <p class="helper-text">Your current age</p>
+                </div>
+            </div>
+
+            <button type="submit" class="submit-btn">Analyze Risk</button>
+        </form>
+
+        {% if show_result %}
+        <div class="result-card {% if result == 'Positive' %}result-positive{% else %}result-negative{% endif %}">
+            {% if result == 'Positive' %}
+            <svg width="60" height="60" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin: 0 auto 15px; display: block;">
+                <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM13 17H11V15H13V17ZM13 13H11V7H13V13Z" fill="#dc3545"/>
+            </svg>
+            {% else %}
+            <svg width="60" height="60" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin: 0 auto 15px; display: block;">
+                <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM10 17L5 12L6.41 10.59L10 14.17L17.59 6.58L19 8L10 17Z" fill="#28a745"/>
+            </svg>
+            {% endif %}
+            
+            <h3 class="result-title">
+                {% if result == 'Positive' %}
+                    Diabetes Risk Detected
+                {% else %}
+                    Low Diabetes Risk
+                {% endif %}
+            </h3>
+            
+            <p style="color: var(--gray); margin-bottom: 10px;">
+                {% if result == 'Positive' %}
+                    The analysis indicates a higher likelihood of diabetes based on your inputs.
+                {% else %}
+                    The analysis indicates a lower likelihood of diabetes based on your inputs.
+                {% endif %}
+            </p>
+
+            <div class="confidence-bar">
+                <div class="confidence-fill" style="width: {{ confidence }}%;">
+                    {{ confidence }}% Confidence
+                </div>
+            </div>
+
+            <p style="color: var(--gray); font-size: 14px; margin-top: 20px;">
+                <strong>Important:</strong> This is a screening tool using machine learning and should not replace professional medical advice. 
+                {% if result == 'Positive' %}
+                Please consult with a healthcare provider for proper diagnosis and treatment.
+                {% else %}
+                Continue maintaining a healthy lifestyle and regular check-ups.
+                {% endif %}
+            </p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}
+

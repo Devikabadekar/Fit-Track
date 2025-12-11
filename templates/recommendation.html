@@ -1,0 +1,287 @@
+{% extends "header_footer.html" %}
+{% block title %}
+Recommendation
+{% endblock %}
+{% block content %}
+
+<style>
+ :root {
+        --primary: #7790ee;   /*Discord blue tone 1  */
+        --primary-light: #64b5f6; /*Discord blue tone 2  */
+        --accent: #a37acc;  /* An accent color */
+        --dark: #1e1e1e;   /* Deeper background tone  */
+        --light: #333333;      /* Lighter panel background - also a slate color */
+        --gray: #b9bbbe;       /* Used for labels, to provide contrast with light */
+        --white: #f1f1f1;        /* Used for main text - easy on the eyes */
+        --button-gradient: linear-gradient(to right, #7790ee, #64b5f6); /* As requested */
+        --border-radius: 8px;
+        --box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);  /* Subtle shadow */
+        --transition: all 0.2s ease;
+    }
+
+  .recommendation-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: var(--text-dark);
+  }
+
+  .page-title {
+    text-align: center;
+    margin-bottom: 0.5rem;
+    color: var(--white);
+    font-size: 2.25rem;
+    font-weight: 600;
+  }
+
+  .subtitle {
+    text-align: center;
+    margin-bottom: 2rem;
+    color: var(--gray);
+    font-size: 1.1rem;
+  }
+
+  .section-title {
+    text-align: center;
+    font-size: 1.75rem;
+    margin: 2rem 0 0.5rem;
+    color: var(--white);
+  }
+
+  .divider {
+    width: 80px;
+    height: 3px;
+    background-color: var(--primary);
+    margin: 0.5rem auto 2rem;
+    border-radius: 3px;
+    transition: var(--transition-normal);
+  }
+
+  .meals-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .meal-card {
+    background-color: var(--light);
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: var(--card-shadow);
+    transition: var(--transition-normal);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .meal-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+  }
+
+  .meal-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background-color: var(--primary);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: var(--transition-normal);
+  }
+
+  .meal-card:hover::before {
+    transform: scaleX(1);
+  }
+
+  .meal-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    color: var(--white);
+    text-align: center;
+  }
+
+  .meal-divider {
+    width: 50px;
+    height: 2px;
+    background-color: var(--primary);
+    margin: 0.5rem auto 1rem;
+    transition: var(--transition-normal);
+  }
+
+  .meal-card:hover .meal-divider {
+    width: 80px;
+  }
+
+  .nutrient-label {
+    font-weight: 600;
+    color: var(--white);
+  }
+
+  .nutrient-value {
+    color: var(--gray);
+  }
+
+  .nutrient-row {
+    margin-bottom: 0.5rem;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .meal-description {
+    margin-bottom: 1rem;
+    line-height: 1.5;
+    color: var(--gray);
+  }
+
+  .info-box {
+    background-color: var(--background-light);
+    border-left: 4px solid var(--primary);
+    padding: 1.25rem;
+    margin: 2rem 0;
+    border-radius: 0 8px 8px 0;
+    transition: var(--transition-normal);
+  }
+
+  .info-box:hover {
+    box-shadow: var(--card-shadow);
+  }
+
+  .info-title {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--white);
+  }
+
+  .back-button {
+    display: inline-block;
+    background-color: var(--primary);
+    color: var(--white);
+    padding: 0.75rem 2rem;
+    border-radius: 50px;
+    text-decoration: none;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition-normal);
+    margin-top: 2rem;
+    box-shadow: 0 4px 6px rgba(46, 204, 113, 0.2);
+  }
+
+  .back-button:hover {
+    background-color: var(--primary-light);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(46, 204, 113, 0.3);
+  }
+
+  .back-button:active {
+    transform: translateY(0);
+  }
+
+  @media (max-width: 768px) {
+    .meals-container {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .fade-in {
+    animation: fadeIn 0.8s ease forwards;
+  }
+
+  .delay-1 { animation-delay: 0.1s; }
+  .delay-2 { animation-delay: 0.2s; }
+  .delay-3 { animation-delay: 0.3s; }
+  .delay-4 { animation-delay: 0.4s; }
+</style>
+
+<div class="recommendation-container">
+  <h1 class="page-title fade-in">Today's Recommendations</h1>
+  <div class="divider fade-in"></div>
+  <p class="subtitle fade-in delay-1">Based on your preferences and nutritional needs, here are your personalized meal recommendations.</p>
+
+  <h2 class="section-title fade-in delay-1">Recommended Meals</h2>
+  <div class="divider fade-in delay-1"></div>
+
+  <div class="meals-container">
+    <div class="meal-card fade-in delay-1">
+      <h3 class="meal-title">Breakfast</h3>
+      <div class="meal-divider"></div>
+      <div class="meal-description">{{bf_prediction}}</div>
+         <div class="nutrient-row">
+        <span class="nutrient-label">Calories:</span>
+        <span class="nutrient-value">{{bf_cal}} kcal</span>
+      </div>
+      <div class="nutrient-row">
+        <span class="nutrient-label">Protein:</span>
+        <span class="nutrient-value">{{bf_protein}} g</span>
+      </div>
+      <div class="nutrient-row">
+        <span class="nutrient-label">Carbs:</span>
+        <span class="nutrient-value">{{bf_carb}} g</span>
+      </div>
+      <div class="nutrient-row">
+        <span class="nutrient-label">Fat:</span>
+        <span class="nutrient-value">{{bf_fat}} g</span>
+      </div>
+    </div>
+
+    <div class="meal-card fade-in delay-2">
+      <h3 class="meal-title">Lunch</h3>
+      <div class="meal-divider"></div>
+      <div class="meal-description">{{lunch_prediction}}</div>
+         <div class="nutrient-row">
+        <span class="nutrient-label">Calories:</span>
+        <span class="nutrient-value">{{lunch_cal}} kcal</span>
+      </div>
+      <div class="nutrient-row">
+        <span class="nutrient-label">Protein:</span>
+        <span class="nutrient-value">{{lunch_protein}} g</span>
+      </div>
+      <div class="nutrient-row">
+        <span class="nutrient-label">Carbs:</span>
+        <span class="nutrient-value">{{lunch_carb}} g</span>
+      </div>
+      <div class="nutrient-row">
+        <span class="nutrient-label">Fat:</span>
+        <span class="nutrient-value">{{lunch_fat}} g</span>
+      </div>
+    </div>
+
+    <div class="meal-card fade-in delay-3">
+      <h3 class="meal-title">Snack</h3>
+      <div class="meal-divider"></div>
+      <div class="meal-description">{{snack_prediction}}</div>
+         <div class="nutrient-row">
+        <span class="nutrient-label">Calories:</span>
+        <span class="nutrient-value">{{snack_cal}} kcal</span>
+      </div>
+      <div class="nutrient-row">
+        <span class="nutrient-label">Protein:</span>
+        <span class="nutrient-value">{{snack_protein}} g</span>
+      </div>
+      <div class="nutrient-row">
+        <span class="nutrient-label">Carbs:</span>
+        <span class="nutrient-value">{{snack_carb}} g</span>
+      </div>
+      <div class="nutrient-row">
+        <span class="nutrient-label">Fat:</span>
+        <span class="nutrient-value">{{snack_fat}} g</span>
+      </div>
+    </div>
+  </div>
+</div>
+<style>
+   body {
+        background-color: #1e1e1e;
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,11 @@
+tensorflow
+keras
+opencv-python
+pandas>=2.3.3
+werkzeug
+ultralytics
+scikit-learn==1.7.2
+numpy==2.3.5
+flask
+scipy>=1.16.0
+joblib>=1.5.0

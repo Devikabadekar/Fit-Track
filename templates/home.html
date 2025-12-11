@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>FitTrack - Smart Food Recognition & Diet Planning</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="food recognition, calorie tracking, diet planning, nutrition app" name="keywords">
+    <meta content="Track and analyze your diet with AI-powered food recognition and personalized nutrition recommendations" name="description">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary: #6c63ff;
+            --primary-dark: #5046e5;
+            --secondary: #00d9ff;
+            --accent: #ff7e5f;
+            --dark: #121212;
+            --darker: #0a0a0a;
+            --dark-card: #1e1e1e;
+            --medium-dark: #2d2d2d;
+            --light-text: #f1f1f1;
+            --gray: #9e9e9e;
+            --white: #ffffff;
+            --border-radius: 10px;
+            --box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+            --transition: all 0.3s ease;
+            --gradient: linear-gradient(135deg, var(--primary), var(--secondary));
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.6;
+            color: var(--light-text);
+            background-color: var(--dark);
+            overflow-x: hidden;
+        }
+
+        a {
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            padding: 0 15px;
+            margin: 0 auto;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            border-radius: var(--border-radius);
+            font-weight: 500;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .btn:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            transition: var(--transition);
+            z-index: -1;
+        }
+
+        .btn:hover:before {
+            width: 100%;
+        }
+
+        .btn-primary {
+            background: var(--gradient);
+            color: var(--white);
+            box-shadow: 0 4px 15px rgba(108, 99, 255, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(108, 99, 255, 0.6);
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary);
+            color: var(--dark);
+            box-shadow: 0 4px 15px rgba(0, 217, 255, 0.3);
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 217, 255, 0.5);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline:hover {
+            color: var(--white);
+            border-color: var(--primary-dark);
+            transform: translateY(-3px);
+        }
+
+        /* Header & Navigation */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            background-color: rgba(18, 18, 18, 0.95);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.2);
+            padding: 15px 0;
+            transition: var(--transition);
+            backdrop-filter: blur(10px);
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--light-text);
+        }
+
+        .logo i {
+            color: var(--secondary);
+            margin-right: 10px;
+            font-size: 28px;
+        }
+
+        .logo span {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .nav {
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            margin-right: 20px;
+        }
+
+        .nav-item {
+            margin: 0 15px;
+        }
+
+        .nav-link {
+            color: var(--light-text);
+            font-weight: 500;
+            position: relative;
+        }
+
+        .nav-link:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            background: var(--gradient);
+            bottom: -5px;
+            left: 0;
+            transition: var(--transition);
+        }
+
+        .nav-link:hover:after,
+        .nav-link.active:after {
+            width: 100%;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .header-btns {
+            display: flex;
+            gap: 10px;
+        }
+
+        .header-btn {
+            padding: 10px 20px;
+        }
+
+        .mobile-menu-toggle {
+            display: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--light-text);
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            padding: 180px 0 120px;
+            background: var(--darker);
+            color: var(--light-text);
+            overflow: hidden;
+        }
+
+        .hero:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at top right, rgba(108, 99, 255, 0.15), transparent 70%),
+                         radial-gradient(circle at bottom left, rgba(0, 217, 255, 0.1), transparent 70%);
+            z-index: 0;
+        }
+
+        .hero-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-title {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.2;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .hero-subtitle {
+            font-size: 1.1rem;
+            margin-bottom: 40px;
+            color: var(--gray);
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        /* Features Section */
+        .features {
+            padding: 100px 0;
+            background-color: var(--medium-dark); /* Keep consistent background */
+            position: relative;
+            overflow: hidden;
+        }
+
+        .features-title {
+            text-align: center;
+            font-size: 2.2rem;
+            margin-bottom: 50px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .feature-card {
+            background-color: var(--dark-card);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            box-shadow: var(--box-shadow);
+            text-align: center;
+            transition: var(--transition);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            color: var(--secondary);
+            margin-bottom: 20px;
+        }
+
+        .feature-card h3 {
+            color: var(--light-text);
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
+        .feature-card p {
+            color: var(--gray);
+            font-size: 1.0rem;
+            line-height: 1.4;
+        }
+
+        /* Adjustments for smaller screens */
+        @media (max-width: 768px) {
+            .features-grid {
+                grid-template-columns: 1fr; /* Stack on smaller screens */
+            }
+            .feature-icon {
+                font-size: 2.5rem; /* Adjust icon size */
+            }
+        }
+        
+        /* Testimonials Section */
+        .testimonials {
+            padding: 100px 0;
+            background-color: var(--darker);
+            position: relative;
+        }
+
+        .testimonials-title {
+            text-align: center;
+            font-size: 2.2rem;
+            margin-bottom: 50px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .testimonial-card {
+            background-color: var(--dark-card);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            box-shadow: var(--box-shadow);
+            transition: var(--transition);
+            border-left: 3px solid var(--primary);
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .testimonial-text {
+            margin-bottom: 20px;
+            color: var(--light-text);
+            font-style: italic;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+        }
+
+        .testimonial-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--white);
+            font-weight: 700;
+            margin-right: 15px;
+        }
+
+        .testimonial-info h4 {
+            color: var(--light-text);
+            margin-bottom: 5px;
+        }
+
+        .testimonial-info p {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 80px 0;
+            background-color: var(--dark);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, rgba(108, 99, 255, 0.08), transparent 60%);
+            z-index: 0;
+        }
+        
+        .cta-content {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .cta-title {
+            font-size: 2.2rem;
+            margin-bottom: 20px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .cta-text {
+            margin-bottom: 30px;
+            color: var(--gray);
+            font-size: 1.1rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .hero-buttons {
+                justify-content: center;
+            }
+
+            .benefits-container {
+                flex-direction: column;
+            }
+
+            .benefits-image,
+            .benefits-content {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .mobile-menu-toggle {
+                display: block;
+            }
+            
+            .nav-menu {
+                position: fixed;
+                top: 70px;
+                left: -100%;
+                width: 80%;
+                height: 100vh;
+                background-color: var(--dark);
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 40px 20px;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+                transition: 0.4s;
+                z-index: 999;
+            }
+            
+            .nav-menu.active {
+                left: 0;
+            }
+            
+            .nav-item {
+                margin: 15px 0;
+            }
+            
+            .header-btns {
+                display: none;
+            }
+            
+            .hero {
+                padding-top: 140px;
+            }
+            
+            .hero-title {
+                font-size: 2rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1rem;
+            }
+            
+            .testimonials-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Accessibility Improvements */
+        :focus {
+            outline: 3px solid var(--accent);
+            outline-offset: 2px;
+        }
+
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: var(--primary);
+            color: white;
+            padding: 8px;
+            z-index: 100;
+            transition: top 0.3s;
+        }
+
+        .skip-link:focus {
+            top: 0;
+        }
+
+        /* Animation for page load */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate {
+            animation: fadeIn 0.8s ease forwards;
+        }
+
+        /* Added for better accessibility */
+        .visuallyhidden {
+            border: 0;
+            clip: rect(0 0 0 0);
+            height: 1px;
+            margin: -1px;
+            overflow: hidden;
+            padding: 0;
+            position: absolute;
+            width: 1px;
+        }
+
+        /* Floating Shapes */
+        .shape {
+            position: absolute;
+            z-index: 0;
+            opacity: 0.5;
+        }
+
+        .shape-1 {
+            top: 10%;
+            left: 5%;
+            width: 100px;
+            height: 100px;
+            border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+            background: linear-gradient(45deg, var(--primary-dark), transparent);
+            animation: float 15s infinite alternate;
+        }
+
+        .shape-2 {
+            bottom: 10%;
+            right: 5%;
+            width: 150px;
+            height: 150px;
+            border-radius: 58% 42% 33% 67% / 70% 58% 42% 30%;
+            background: linear-gradient(45deg, var(--secondary), transparent);
+            animation: float 20s infinite alternate-reverse;
+        }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            50% { transform: translate(15px, -15px) rotate(180deg); }
+            100% { transform: translate(-15px, 15px) rotate(360deg); }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Skip to content link for accessibility -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Updated Header Navigation -->
+    <header class="header">
+        <div class="container header-content">
+            <a href="/" class="logo">
+                <i class="fas fa-utensils"></i>
+                Fit<span>Track</span>
+            </a>
+            
+            <div class="mobile-menu-toggle" id="menu-toggle">
+                <i class="fas fa-bars"></i>
+            </div>
+            
+            <nav class="nav">
+                <ul class="nav-menu" id="nav-menu">
+                    <li class="nav-item">
+                        <a href="/" class="nav-link active">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/predict" class="nav-link">Analyze Food</a>
+                    </li>
+                </ul>
+                
+                <div class="header-btns">
+                    <a href="/login" class="btn btn-outline header-btn">Login</a>
+                    <a href="/register" class="btn btn-primary header-btn">Register</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main id="main-content">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="container hero-content animate">
+                <h1 class="hero-title">Smart Food Recognition & Diet Planning</h1>
+                <p class="hero-subtitle">Track and analyze your diet with ease. Estimate calorie intake accurately and make healthier choices effortlessly with our AI-powered nutrition system.</p>
+                <div class="hero-buttons">
+                    <a href="/predict" class="btn btn-primary">Analyze Food</a>
+                    <a href="/login" class="btn btn-outline" id="signin-btn">Sign In</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Alternative Features Section -->
+        <section class="features">
+            <div class="container">
+                <h2 class="features-title animate">Unlock Your Health Potential</h2>
+                <div class="features-grid animate">
+
+                    <div class="feature-card">
+                        <i class="fas fa-camera feature-icon"></i>
+                        <h3>Photo Food Logging</h3>
+                        <p>Effortlessly log meals with just a photo. Get instant nutritional analysis and track your food intake in seconds.</p>
+                    </div>
+
+                    <div class="feature-card">
+                        <i class="fas fa-globe feature-icon"></i>
+                        <h3>Diverse Cuisine Analysis</h3>
+                        <p>Our AI understands regional cuisines. Get accurate insights, no matter what you're eating, from sushi to samosas.</p>
+                    </div>
+
+                    <div class="feature-card">
+                        <i class="fas fa-lightbulb feature-icon"></i>
+                        <h3>Smart Meal Recommendations</h3>
+                        <p>Receive personalized meal suggestions based on your preferences, dietary restrictions, and health goals.</p>
+                    </div>
+
+                    <div class="feature-card">
+                        <i class="fas fa-chart-line feature-icon"></i>
+                        <h3>Detailed Progress Tracking</h3>
+                        <p>Monitor your nutritional progress with comprehensive insights and visual data. Stay motivated as you achieve your goals.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <i class="fas fa-heart feature-icon"></i>
+                        <h3>Personalized Health Insights</h3>
+                        <p>Receive tailored health insights based on your diet, preferences, and activity levels to optimize your overall well-being.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <i class="fas fa-apple-alt feature-icon"></i>
+                        <h3>Delicious & Healthy Recipes</h3>
+                        <p>Discover a curated collection of healthy and delicious recipes that align with your dietary needs and preferences.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Testimonials Section (New) -->
+        <section class="testimonials">
+            <div class="container">
+                <h2 class="testimonials-title">What Our Users Say</h2>
+                <div class="testimonials-grid">
+                    <div class="testimonial-card animate">
+                        <p class="testimonial-text">"FitTrack has completely changed how I approach my meals. The food recognition is incredibly accurate and has helped me maintain a balanced diet."</p>
+                        <div class="testimonial-author">
+                            <div class="testimonial-avatar">RP</div>
+                            <div class="testimonial-info">
+                                <h4>Rahul P.</h4>
+                                <p>Fitness Enthusiast</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="testimonial-card animate">
+                        <p class="testimonial-text">"As someone who loves Indian cuisine, this app has been a game-changer. It recognizes all my favorite dishes and helps me make healthier choices."</p>
+                        <div class="testimonial-author">
+                            <div class="testimonial-avatar">AP</div>
+                            <div class="testimonial-info">
+                                <h4>Anjali P.</h4>
+                                <p>Food Blogger</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="testimonial-card animate">
+                        <p class="testimonial-text">"The personalized recommendations are spot on! I've discovered new healthy recipes that fit my dietary needs and taste preferences."</p>
+                        <div class="testimonial-author">
+                            <div class="testimonial-avatar">SK</div>
+                            <div class="testimonial-info">
+                                <h4>Sanjay K.</h4>
+                                <p>Health Coach</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="cta-section">
+            <div class="container cta-content animate">
+                <h2 class="cta-title">Ready to improve your diet?</h2>
+                <p class="cta-text">Get personalized nutrition recommendations and start tracking your diet today.</p>
+                <a href="/login" class="btn btn-primary" id="login-cta-btn">Get Started</a>
+            </div>
+        </section>
+    </main>
+
+    <!-- JavaScript -->
+    <script>
+        // Check if user is logged in
+        function checkLoginStatus() {
+            // This is a simplified example. In a real application, you would check
+            // for a token in localStorage or cookies, or make an API call to verify login status
+            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+            
+            // Get all recommendation-related elements
+            const loginCTABtn = document.getElementById('login-cta-btn');
+            const signinBtn = document.getElementById('signin-btn');
+
+            // Show/hide elements based on login status
+            if (isLoggedIn) {
+
+                if (loginCTABtn) loginCTABtn.style.display = 'none';
+                
+                // Change signin button to account or logout
+                if (signinBtn) {
+                    signinBtn.textContent = 'Login';
+                    signinBtn.href = '/predict';
+                }
+            } else {
+
+                if (loginCTABtn) loginCTABtn.style.display = 'inline-block';
+            }
+        }
+        
+        // Mobile menu toggle
+        const menuToggle = document.getElementById('menu-toggle');
+        const navMenu = document.getElementById('nav-menu');
+        
+        if (menuToggle && navMenu) {
+            menuToggle.addEventListener('click', () => {
+                navMenu.classList.toggle('active');
+            });
+        }
+        
+        // Close mobile menu when clicking on a link
+        const navLinks = document.querySelectorAll('.nav-link');
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                if (navMenu.classList.contains('active')) {
+                    navMenu.classList.remove('active');
+                }
+            });
+        });
+        
+        // Remove loader/spinner
+        window.addEventListener('load', () => {
+            const spinner = document.getElementById('spinner');
+            if (spinner) {
+                spinner.style.display = 'none';
+            }
+            
+            // Check login status when page loads
+            checkLoginStatus();
+        });
+        
+        // For demo purposes - toggle login status with login button
+        // In a real app, this would be handled by your authentication system
+        document.addEventListener('DOMContentLoaded', () => {
+            const signinBtn = document.getElementById('signin-btn');
+            const loginCTABtn = document.getElementById('login-cta-btn');
+            
+            if (signinBtn) {
+                signinBtn.addEventListener('click', function(e) {
+                    if (localStorage.getItem('isLoggedIn') !== 'true') {
+                        // This is just for demo - would normally go to login page
+                        localStorage.setItem('isLoggedIn', 'true');
+                        checkLoginStatus();
+                        e.preventDefault(); // Prevent default navigation for demo
+                    }
+                });
+            }
+            
+            if (loginCTABtn) {
+                loginCTABtn.addEventListener('click', function(e) {
+                    // This is just for demo - would normally go to login page
+                    localStorage.setItem('isLoggedIn', 'true');
+                    checkLoginStatus();
+                    e.preventDefault(); // Prevent default navigation for demo
+                });
+            }
+        });
+    </script>
+</body>
+</html>
